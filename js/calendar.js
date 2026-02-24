@@ -1,20 +1,31 @@
 const calendarGrid = document.getElementById("calendarGrid");
+const monthYear = document.getElementById("monthYear");
+const prevBtn = document.getElementById("prevMonth");
+const nextBtn = document.getElementById("nextMonth");
 
-const assignments = JSON.parse(localStorage.getItem("assignments")) || [];
+let assignments = JSON.parse(localStorage.getItem("assignments")) || [];
 
 const today = new Date();
-let currentMonth = today.getMonth(); // 0-based
+let currentMonth = today.getMonth(); // 0-11
 let currentYear = today.getFullYear();
 
 renderCalendar(currentMonth, currentYear);
 
+/***********************
+ * RENDER CALENDAR
+ ***********************/
 function renderCalendar(month, year) {
   calendarGrid.innerHTML = "";
+
+  monthYear.textContent = new Date(year, month).toLocaleString("en-US", {
+    month: "long",
+    year: "numeric"
+  });
 
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Empty cells before first day
+  // Empty cells before month starts
   for (let i = 0; i < firstDay; i++) {
     calendarGrid.appendChild(document.createElement("div"));
   }
@@ -24,25 +35,26 @@ function renderCalendar(month, year) {
     cell.className = "calendar-cell";
 
     const dateLabel = document.createElement("span");
+    dateLabel.className = "date-number";
     dateLabel.textContent = day;
     cell.appendChild(dateLabel);
 
-    // Match assignments for this date
-    const dailyAssignments = assignments.filter(a => {
-      const d = new Date(a.deadline);
-      return (
-        d.getDate() === day &&
-        d.getMonth() === month &&
-        d.getFullYear() === year
-      );
-    });
-
-    dailyAssignments.forEach(a => {
-      const dot = document.createElement("div");
-      dot.className = "dot " + a.priority.toLowerCase();
-      dot.textContent = a.title;
-      cell.appendChild(dot);
-    });
+    // Assignments for this date
+    assignments
+      .filter(a => {
+        const d = new Date(a.deadline);
+        return (
+          d.getDate() === day &&
+          d.getMonth() === month &&
+          d.getFullYear() === year
+        );
+      })
+      .forEach(a => {
+        const tag = document.createElement("div");
+        tag.className = `calendar-tag ${a.priority.toLowerCase()}`;
+        tag.textContent = a.subject;
+        cell.appendChild(tag);
+      });
 
     // Highlight today
     if (
@@ -56,3 +68,28 @@ function renderCalendar(month, year) {
     calendarGrid.appendChild(cell);
   }
 }
+
+/***********************
+ * NAVIGATION
+ ***********************/
+prevBtn.addEventListener("click", () => {
+  currentMonth--;
+
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+
+  renderCalendar(currentMonth, currentYear);
+});
+
+nextBtn.addEventListener("click", () => {
+  currentMonth++;
+
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+
+  renderCalendar(currentMonth, currentYear);
+});
