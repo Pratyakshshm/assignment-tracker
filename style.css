@@ -37,39 +37,93 @@ body {
 /* LAYOUT */
 .container {
   padding: 30px;
+  display: flex;
+  justify-content: space-around;
 }
 
-/* STATS */
 .stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .stat-card {
-  background: #171a23;
+  position: relative;
   padding: 20px;
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 16px;
+  color: #fff;
+  width: 16vw;
+  height: 125px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.green { color: #3ad17b; }
-.yellow { color: #f5b942; }
-.red { color: #ff4d4d; }
+.stat-card:hover {
+  /* transform: translateY(-5px); */
+  box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+}
 
+.stat-card h2 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.stat-card p {
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+/* ================= ICON ================= */
+.stat-card .icon {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 26px;
+  opacity: 0.25;
+}
+
+/* ================= CARD VARIANTS ================= */
+.stat-card.total {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+}
+
+.stat-card.pending {
+  background: linear-gradient(135deg, #5f4320, #b8872a);
+}
+
+.stat-card.submitted {
+  background: linear-gradient(135deg, #134e4a, #22c55e);
+}
+
+.stat-card.missed {
+  background: linear-gradient(135deg, #4c0519, #ef4444);
+}
+
+.stat-card.completion {
+  background: linear-gradient(135deg, #0f2027, #2c5364);
+}
 /* CONTROLS */
 .controls {
   margin: 25px 0;
   display: flex;
   gap: 10px;
+  margin-left: 55px;
 }
 
-.controls input,
+.controls input{
+    padding: 10px;
+    background: #171a23;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 6px;
+    width: 35vw;
+}
 .controls select {
   padding: 10px;
   background: #171a23;
   color: white;
   border: 1px solid #333;
+  width: 10vw;
   border-radius: 6px;
 }
 
