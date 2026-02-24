@@ -9,7 +9,6 @@ body {
   color: #fff;
 }
 
-/* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -29,6 +28,12 @@ body {
   color: #4da3ff;
 }
 
+.dash{
+    margin-left: 35px;
+}
+.dash p{
+    color: #909090;
+}
 /* LAYOUT */
 .container {
   padding: 30px;
