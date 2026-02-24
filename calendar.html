@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>ADT | Calendar</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -16,10 +17,17 @@
 </nav>
 
 <div class="container">
-  <h2>February 2026</h2>
-  <div id="calendarGrid" class="calendar-grid"></div>
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button id="prevMonth">‹</button>
+      <h2 id="monthYear"></h2>
+      <button id="nextMonth">›</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
 </div>
 
-<script src="calendar.js"></script>
+<script src="js/calendar.js"></script>
 </body>
 </html>

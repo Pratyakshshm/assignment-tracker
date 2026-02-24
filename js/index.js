@@ -10,7 +10,13 @@ function saveAssignments(data) {
 }
 
 /***********************
- * DOM REFERENCES
+ * STATE
+ ***********************/
+let assignments = getAssignments();
+let editIndex = null;
+
+/***********************
+ * ELEMENTS
  ***********************/
 const list = document.getElementById("assignmentList");
 const modal = document.getElementById("modal");
@@ -20,75 +26,67 @@ const subjectInput = document.getElementById("subject");
 const deadlineInput = document.getElementById("deadline");
 const priorityInput = document.getElementById("priority");
 
-/***********************
- * STATE
- ***********************/
-let assignments = getAssignments();
+const addBtn = document.getElementById("addBtn");
+const saveBtn = document.getElementById("saveAssignment");
+const closeModal = document.getElementById("closeModal");
 
 /***********************
  * INIT
  ***********************/
-autoMarkMissed();
-render();
+renderAssignments();
 
 /***********************
- * RENDER
+ * RENDER ASSIGNMENTS
  ***********************/
-function render() {
+function renderAssignments() {
   list.innerHTML = "";
   assignments = getAssignments();
 
-  assignments.forEach(a => {
+  assignments.forEach((a, index) => {
     const card = document.createElement("div");
-    card.className = `card ${a.priority.toLowerCase()}`;
+    card.className = "assignment-card";
 
-    card.innerHTML = `
-      <div>
+   card.innerHTML = `
+  <div class="card-main">
+
+    <!-- LEFT CONTENT -->
+    <div class="card-left">
+      <div class="card-header">
         <h3>${a.title}</h3>
-        <small>${a.subject}</small><br />
-        <small>${new Date(a.deadline).toLocaleString()}</small>
+        <span class="priority ${a.priority.toLowerCase()}">${a.priority}</span>
       </div>
 
-      <select onchange="changeStatus(${a.id}, this.value)">
+      <p><strong>Subject:</strong> ${a.subject}</p>
+      <p><strong>Deadline:</strong> ${new Date(a.deadline).toLocaleString()}</p>
+
+      <div class="card-actions">
+        <button class="edit-btn" onclick="editAssignment(${index})">✏️ Edit</button>
+        <button class="delete-btn" onclick="deleteAssignment(${index})">🗑 Delete</button>
+      </div>
+    </div>
+
+    <!-- RIGHT STATUS -->
+    <div class="card-right">
+      <select class="status-select"
+        onchange="changeStatus(${index}, this.value)">
         <option value="Pending" ${a.status === "Pending" ? "selected" : ""}>Pending</option>
         <option value="Submitted" ${a.status === "Submitted" ? "selected" : ""}>Submitted</option>
         <option value="Missed" ${a.status === "Missed" ? "selected" : ""}>Missed</option>
       </select>
-    `;
+    </div>
+
+  </div>
+`;
 
     list.appendChild(card);
   });
 
   updateStats();
 }
-
-/***********************
- * STATUS CHANGE
- ***********************/
-function changeStatus(id, status) {
-  assignments = assignments.map(a =>
-    a.id === id
-      ? { ...a, status, submittedAt: status === "Submitted" ? new Date().toISOString() : a.submittedAt }
-      : a
-  );
-
+function changeStatus(index, newStatus) {
+  assignments[index].status = newStatus;
   saveAssignments(assignments);
-  render();
-}
-
-/***********************
- * AUTO MARK MISSED
- ***********************/
-function autoMarkMissed() {
-  const now = new Date();
-
-  assignments = assignments.map(a =>
-    a.status !== "Submitted" && new Date(a.deadline) < now
-      ? { ...a, status: "Missed" }
-      : a
-  );
-
-  saveAssignments(assignments);
+  renderAssignments();
 }
 
 /***********************
@@ -109,44 +107,91 @@ function updateStats() {
 }
 
 /***********************
- * MODAL CONTROLS
+ * ADD / EDIT
  ***********************/
-document.getElementById("addBtn").onclick = () => {
+addBtn.onclick = () => {
+  editIndex = null;
+  clearForm();
   modal.style.display = "flex";
 };
 
-document.getElementById("closeModal").onclick = () => {
-  modal.style.display = "none";
-};
+saveBtn.onclick = () => {
+  const title = titleInput.value.trim();
+  const subject = subjectInput.value.trim();
+  const deadline = deadlineInput.value;
+  const priority = priorityInput.value;
 
-/***********************
- * ADD ASSIGNMENT
- ***********************/
-document.getElementById("saveAssignment").onclick = () => {
-  if (!titleInput.value || !subjectInput.value || !deadlineInput.value) {
+  if (!title || !subject || !deadline) {
     alert("Please fill all required fields");
     return;
   }
 
-  const assignment = {
-    id: Date.now(),
-    title: titleInput.value.trim(),
-    subject: subjectInput.value.trim(),
-    deadline: deadlineInput.value,
-    priority: priorityInput.value,
-    status: "Pending",
-    createdAt: new Date().toISOString(),
-    submittedAt: null
-  };
+  if (editIndex !== null) {
+    // UPDATE
+    assignments[editIndex] = {
+      ...assignments[editIndex],
+      title,
+      subject,
+      deadline,
+      priority
+    };
+  } else {
+    // CREATE
+    assignments.push({
+      title,
+      subject,
+      deadline,
+      priority,
+      status: "Pending",
+      createdAt: new Date().toISOString()
+    });
+  }
 
-  assignments.push(assignment);
   saveAssignments(assignments);
-
   modal.style.display = "none";
+  clearForm();
+  renderAssignments();
+};
 
+/***********************
+ * EDIT
+ ***********************/
+function editAssignment(index) {
+  const a = assignments[index];
+
+  titleInput.value = a.title;
+  subjectInput.value = a.subject;
+  deadlineInput.value = a.deadline;
+  priorityInput.value = a.priority;
+
+  editIndex = index;
+  modal.style.display = "flex";
+}
+
+/***********************
+ * DELETE
+ ***********************/
+function deleteAssignment(index) {
+  if (!confirm("Delete this assignment?")) return;
+
+  assignments.splice(index, 1);
+  saveAssignments(assignments);
+  renderAssignments();
+}
+
+/***********************
+ * MODAL CLOSE
+ ***********************/
+closeModal.onclick = () => {
+  modal.style.display = "none";
+};
+
+/***********************
+ * HELPERS
+ ***********************/
+function clearForm() {
   titleInput.value = "";
   subjectInput.value = "";
   deadlineInput.value = "";
-
-  render();
-};
+  priorityInput.value = "Medium";
+}
