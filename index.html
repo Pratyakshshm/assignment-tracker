@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ADT | Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">📘 ADT</div>
+  <div class="nav-links">
+    <a class="active" href="index.html">Dashboard</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="analytics.html">Analytics</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ===== STATS ===== -->
+  <div class="stats">
+    <div class="stat-card">
+      <h2 id="totalCount">0</h2>
+      <p>Total</p>
+    </div>
+    <div class="stat-card">
+      <h2 id="pendingCount" class="yellow">0</h2>
+      <p>Pending</p>
+    </div>
+    <div class="stat-card">
+      <h2 id="submittedCount" class="green">0</h2>
+      <p>Submitted</p>
+    </div>
+    <div class="stat-card">
+      <h2 id="missedCount" class="red">0</h2>
+      <p>Missed</p>
+    </div>
+    <div class="stat-card">
+      <h2 id="completion">0%</h2>
+      <p>Completion</p>
+    </div>
+  </div>
+
+  <!-- ===== CONTROLS ===== -->
+  <div class="controls">
+    <input type="text" placeholder="Search assignments..." disabled />
+    <select disabled>
+      <option>All Status</option>
+    </select>
+    <button id="addBtn">+ Add</button>
+  </div>
+
+  <!-- ===== ASSIGNMENT LIST ===== -->
+  <div id="assignmentList"></div>
+
+</div>
+
+<!-- ================= ADD ASSIGNMENT MODAL ================= -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+
+    <span class="close" id="closeModal">&times;</span>
+    <h3>Add Assignment</h3>
+
+    <label>Title *</label>
+    <input type="text" id="title" placeholder="Assignment title" required />
+
+    <label>Subject *</label>
+    <input type="text" id="subject" placeholder="e.g. Mathematics" required />
+
+    <label>Deadline *</label>
+    <input type="datetime-local" id="deadline" required />
+
+    <label>Priority</label>
+    <select id="priority">
+      <option>Low</option>
+      <option selected>Medium</option>
+      <option>High</option>
+    </select>
+
+    <button id="saveAssignment">Add Assignment</button>
+
+  </div>
+</div>
+
+<!-- ================= SCRIPT (FIXED PATH) ================= -->
+<script src="js/index.js"></script>
+
+</body>
+</html>
