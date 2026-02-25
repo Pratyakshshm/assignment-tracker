@@ -188,6 +188,8 @@ body {
   border-radius: 999px;
   font-size: 12px;
   font-weight: bold;
+  margin-right: -139px;
+  margin-top: 10px;
 }
 
 .priority.low { background: #1f2937; color: #93c5fd; }
@@ -196,12 +198,16 @@ body {
 
 /* Status */
 .status-select {
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 6px 8px;
+  border-radius: 15px;
   border: 1px solid #374151;
   background: #020617;
   color: #e5e7eb;
   cursor: pointer;
+  width: 122px;
+  height: 40px;
+  text-align: center;
+  font-size: medium;
 }
 
 /* Actions */
@@ -328,10 +334,12 @@ body {
 /* Assignment Tags */
 .calendar-tag {
   margin-top: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  width: fit-content;
+  padding: 17px 10px;
+  border-radius: 12px;
+  font-size: 17px;
+  width: 55px;
+  height: 55px;
+    text-align: center;
 }
 
 .calendar-tag.low { background: #22c55e; color: #000; }
