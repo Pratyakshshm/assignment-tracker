@@ -1,4 +1,3 @@
-/* ================= RESET ================= */
 * {
   box-sizing: border-box;
   font-family: Arial, sans-serif;
@@ -10,7 +9,6 @@ body {
   color: #fff;
 }
 
-/* ================= NAVBAR ================= */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -30,7 +28,6 @@ body {
   color: #4da3ff;
 }
 
-/* ================= DASHBOARD ================= */
 .container {
   padding: 30px;
   display: flex;
@@ -48,7 +45,6 @@ body {
   color: #909090;
 }
 
-/* ================= STATS ================= */
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -84,7 +80,6 @@ body {
   opacity: 0.25;
 }
 
-/* Card Variants */
 .stat-card.total {
   background: linear-gradient(135deg, #1e3c72, #2a5298);
 }
@@ -101,7 +96,6 @@ body {
   background: linear-gradient(135deg, #0f2027, #2c5364);
 }
 
-/* ================= CONTROLS ================= */
 .controls {
   margin: 25px 55px;
   display: flex;
@@ -133,7 +127,6 @@ body {
   cursor: pointer;
 }
 
-/* ================= ASSIGNMENTS ================= */
 #assignmentList {
   margin: 20px 55px;
   display: flex;
@@ -154,7 +147,6 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
-/* Card Layout */
 .card-main {
   display: flex;
   justify-content: space-between;
@@ -170,7 +162,6 @@ body {
   align-items: center;
 }
 
-/* Header */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -182,7 +173,6 @@ body {
   font-size: 16px;
 }
 
-/* Priority Badge */
 .priority {
   padding: 4px 10px;
   border-radius: 999px;
@@ -196,7 +186,6 @@ body {
 .priority.medium { background: #312e1f; color: #facc15; }
 .priority.high { background: #3f1d1d; color: #f87171; }
 
-/* Status */
 .status-select {
   padding: 6px 8px;
   border-radius: 15px;
@@ -210,7 +199,6 @@ body {
   font-size: medium;
 }
 
-/* Actions */
 .card-actions {
   margin-top: 8px;
   display: flex;
@@ -228,7 +216,6 @@ body {
 .edit-btn { background: #2563eb; color: white; }
 .delete-btn { background: #dc2626; color: white; }
 
-/* ================= MODAL ================= */
 .modal {
   display: none;
   position: fixed;
@@ -257,7 +244,6 @@ body {
   cursor: pointer;
 }
 
-/* ================= CALENDAR ================= */
 .calendar-page {
   width: 100%;
   display: flex;
@@ -270,7 +256,6 @@ body {
   margin: 40px auto;
 }
 
-/* Month Header */
 .calendar-top {
   display: flex;
   justify-content: center;
@@ -293,7 +278,6 @@ body {
   cursor: pointer;
 }
 
-/* Weekdays */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -302,14 +286,12 @@ body {
   color: #9ca3af;
 }
 
-/* Grid */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 12px;
 }
 
-/* Cells */
 .calendar-cell {
   background: #151922;
   border-radius: 14px;
@@ -331,7 +313,6 @@ body {
   font-size: 14px;
 }
 
-/* Assignment Tags */
 .calendar-tag {
   margin-top: 6px;
   padding: 17px 10px;
@@ -345,3 +326,21 @@ body {
 .calendar-tag.low { background: #22c55e; color: #000; }
 .calendar-tag.medium { background: #facc15; color: #000; }
 .calendar-tag.high { background: #f87171; color: #000; }
+
+
+.analytics-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  background: #171a23;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.chart-card h3 {
+  margin-bottom: 10px;
+}

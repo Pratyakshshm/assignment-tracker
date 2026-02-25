@@ -1,6 +1,4 @@
-/***********************
- * STORAGE HELPERS
- ***********************/
+
 function getAssignments() {
   return JSON.parse(localStorage.getItem("assignments")) || [];
 }
@@ -9,15 +7,9 @@ function saveAssignments(data) {
   localStorage.setItem("assignments", JSON.stringify(data));
 }
 
-/***********************
- * STATE
- ***********************/
 let assignments = getAssignments();
 let editIndex = null;
 
-/***********************
- * ELEMENTS
- ***********************/
 const list = document.getElementById("assignmentList");
 const modal = document.getElementById("modal");
 
@@ -30,14 +22,8 @@ const addBtn = document.getElementById("addBtn");
 const saveBtn = document.getElementById("saveAssignment");
 const closeModal = document.getElementById("closeModal");
 
-/***********************
- * INIT
- ***********************/
 renderAssignments();
 
-/***********************
- * RENDER ASSIGNMENTS
- ***********************/
 function renderAssignments() {
   list.innerHTML = "";
   assignments = getAssignments();
@@ -89,9 +75,6 @@ function changeStatus(index, newStatus) {
   renderAssignments();
 }
 
-/***********************
- * STATS
- ***********************/
 function updateStats() {
   const total = assignments.length;
   const pending = assignments.filter(a => a.status === "Pending").length;
@@ -106,9 +89,6 @@ function updateStats() {
     total ? Math.round((submitted / total) * 100) + "%" : "0%";
 }
 
-/***********************
- * ADD / EDIT
- ***********************/
 addBtn.onclick = () => {
   editIndex = null;
   clearForm();
@@ -127,7 +107,6 @@ saveBtn.onclick = () => {
   }
 
   if (editIndex !== null) {
-    // UPDATE
     assignments[editIndex] = {
       ...assignments[editIndex],
       title,
@@ -136,7 +115,6 @@ saveBtn.onclick = () => {
       priority
     };
   } else {
-    // CREATE
     assignments.push({
       title,
       subject,
@@ -153,9 +131,6 @@ saveBtn.onclick = () => {
   renderAssignments();
 };
 
-/***********************
- * EDIT
- ***********************/
 function editAssignment(index) {
   const a = assignments[index];
 
@@ -168,9 +143,6 @@ function editAssignment(index) {
   modal.style.display = "flex";
 }
 
-/***********************
- * DELETE
- ***********************/
 function deleteAssignment(index) {
   if (!confirm("Delete this assignment?")) return;
 
@@ -179,16 +151,10 @@ function deleteAssignment(index) {
   renderAssignments();
 }
 
-/***********************
- * MODAL CLOSE
- ***********************/
 closeModal.onclick = () => {
   modal.style.display = "none";
 };
 
-/***********************
- * HELPERS
- ***********************/
 function clearForm() {
   titleInput.value = "";
   subjectInput.value = "";

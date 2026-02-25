@@ -11,9 +11,6 @@ let currentYear = today.getFullYear();
 
 renderCalendar(currentMonth, currentYear);
 
-/***********************
- * RENDER CALENDAR
- ***********************/
 function renderCalendar(month, year) {
   calendarGrid.innerHTML = "";
 
@@ -25,7 +22,6 @@ function renderCalendar(month, year) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Empty cells before month starts
   for (let i = 0; i < firstDay; i++) {
     calendarGrid.appendChild(document.createElement("div"));
   }
@@ -39,7 +35,6 @@ function renderCalendar(month, year) {
     dateLabel.textContent = day;
     cell.appendChild(dateLabel);
 
-    // Assignments for this date
     assignments
       .filter(a => {
         const d = new Date(a.deadline);
@@ -56,7 +51,6 @@ function renderCalendar(month, year) {
         cell.appendChild(tag);
       });
 
-    // Highlight today
     if (
       day === today.getDate() &&
       month === today.getMonth() &&
@@ -69,9 +63,6 @@ function renderCalendar(month, year) {
   }
 }
 
-/***********************
- * NAVIGATION
- ***********************/
 prevBtn.addEventListener("click", () => {
   currentMonth--;
 

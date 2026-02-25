@@ -1,76 +1,77 @@
-const assignments = JSON.parse(localStorage.getItem("assignments")) || [];
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ---------------- ON-TIME RATE ---------------- */
-const submitted = assignments.filter(a => a.status === "Submitted");
-const onTime = submitted.filter(a =>
-  new Date(a.deadline) >= new Date(a.submittedAt || a.deadline)
-);
+  const assignments = JSON.parse(localStorage.getItem("assignments")) || [];
 
-const rate = submitted.length
-  ? Math.round((onTime.length / submitted.length) * 100)
-  : 0;
+  drawPieChart(assignments);
+  drawBarChart(assignments);
 
-document.getElementById("onTimeRate").textContent = rate + "%";
-
-/* ---------------- STATUS BREAKDOWN ---------------- */
-const statusCount = { Pending: 0, Submitted: 0, Missed: 0 };
-
-assignments.forEach(a => statusCount[a.status]++);
-
-renderBars("statusChart", statusCount, {
-  Pending: "#f5b942",
-  Submitted: "#3ad17b",
-  Missed: "#ff4d4d"
 });
 
-/* ---------------- SUBJECT BREAKDOWN ---------------- */
-const subjectCount = {};
+function drawPieChart(assignments) {
+  const canvas = document.getElementById("pieChart");
+  const ctx = canvas.getContext("2d");
 
-assignments.forEach(a => {
-  subjectCount[a.subject] = (subjectCount[a.subject] || 0) + 1;
-});
+  const counts = {
+    Pending: 0,
+    Submitted: 0,
+    Missed: 0
+  };
 
-renderBars("subjectChart", subjectCount, "#4da3ff");
+  assignments.forEach(a => counts[a.status]++);
 
-/* ---------------- WEEKLY WORKLOAD ---------------- */
-const weekCount = {};
+  const values = Object.values(counts);
+  const labels = Object.keys(counts);
+  const colors = ["#facc15", "#22c55e", "#ef4444"];
 
-assignments.forEach(a => {
-  const d = new Date(a.deadline);
-  const week = getWeekNumber(d);
-  weekCount["W" + week] = (weekCount["W" + week] || 0) + 1;
-});
+  const total = values.reduce((a, b) => a + b, 0);
+  if (total === 0) return;
 
-renderBars("weeklyChart", weekCount, "#facc15");
+  let startAngle = 0;
 
-/* ---------------- HELPERS ---------------- */
-function renderBars(containerId, data, colors) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
+  values.forEach((value, i) => {
+    const slice = (value / total) * Math.PI * 2;
 
-  const max = Math.max(...Object.values(data), 1);
+    ctx.beginPath();
+    ctx.moveTo(150, 150);
+    ctx.arc(150, 150, 120, startAngle, startAngle + slice);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
 
-  for (let key in data) {
-    const row = document.createElement("div");
-    row.className = "bar-row";
+    startAngle += slice;
+  });
 
-    const label = document.createElement("span");
-    label.textContent = key;
-
-    const bar = document.createElement("div");
-    bar.className = "bar";
-    bar.style.width = (data[key] / max) * 100 + "%";
-    bar.style.background =
-      typeof colors === "object" ? colors[key] : colors;
-
-    row.appendChild(label);
-    row.appendChild(bar);
-    container.appendChild(row);
-  }
+  labels.forEach((label, i) => {
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(10, 10 + i * 20, 12, 12);
+    ctx.fillStyle = "#fff";
+    ctx.fillText(label, 28, 20 + i * 20);
+  });
 }
 
-function getWeekNumber(date) {
-  const firstDay = new Date(date.getFullYear(), 0, 1);
-  return Math.ceil(((date - firstDay) / 86400000 + firstDay.getDay() + 1) / 7);
-}
+function drawBarChart(assignments) {
+  const canvas = document.getElementById("barChart");
+  const ctx = canvas.getContext("2d");
 
+  const counts = { Low: 0, Medium: 0, High: 0 };
+  assignments.forEach(a => counts[a.priority]++);
+
+  const values = Object.values(counts);
+  const labels = Object.keys(counts);
+
+  const max = Math.max(...values, 1);
+  const barWidth = 60;
+  const gap = 40;
+  const baseY = 260;
+
+  values.forEach((value, i) => {
+    const height = (value / max) * 180;
+    const x = 60 + i * (barWidth + gap);
+
+    ctx.fillStyle = "#60a5fa";
+    ctx.fillRect(x, baseY - height, barWidth, height);
+
+    ctx.fillStyle = "#fff";
+    ctx.fillText(labels[i], x + 8, baseY + 16);
+    ctx.fillText(value, x + 22, baseY - height - 6);
+  });
+}
