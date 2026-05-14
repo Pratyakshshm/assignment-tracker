@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ADT | Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">
+      <div class="logo-icon">📘</div>
+      <span class="logo-text">ADT</span>
+    </div>
+    <div class="nav-links">
+      <a class="active" href="index.html">Dashboard</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="analytics.html">Analytics</a>
+    </div>
+    <div class="nav-user">
+      <span class="user-chip" id="userEmail"></span>
+      <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- DASHBOARD HEADER -->
+    <div class="dash-header">
+      <div>
+        <h1 class="dash-title">Dashboard</h1>
+        <p class="dash-sub" id="greeting">Good morning — let's get things done.</p>
+      </div>
+      <button id="addBtn" class="new-btn">＋ New Assignment</button>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card blue">
+        <div class="stat-top">
+          <div class="stat-icon-wrap blue">📋</div>
+        </div>
+        <div class="stat-value" id="totalCount">—</div>
+        <div class="stat-label">Total Assignments</div>
+        <div class="stat-bar blue"></div> 
+      </div>
+      <div class="stat-card green">
+        <div class="stat-top">
+          <div class="stat-icon-wrap green">✅</div>
+        </div>
+        <div class="stat-value" id="submittedCount">—</div>
+        <div class="stat-label">Completed</div>
+        <div class="stat-bar green"></div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-top">
+          <div class="stat-icon-wrap yellow">⏳</div>
+        </div>
+        <div class="stat-value" id="pendingCount">—</div>
+        <div class="stat-label">In Progress</div>
+        <div class="stat-bar yellow"></div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-top">
+          <div class="stat-icon-wrap red">⚠️</div>
+        </div>
+        <div class="stat-value" id="missedCount">—</div>
+        <div class="stat-label">Overdue</div>
+        <div class="stat-bar red"></div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-top">
+          <div class="stat-icon-wrap purple">🔥</div>
+        </div>
+        <div class="stat-value" id="streakCount">—</div>
+        <div class="stat-label">Day Streak</div>
+        <div class="stat-bar purple"></div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT GRID -->
+    <div class="main-grid">
+
+      <!-- LEFT: Active Assignments -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">📌 Active Assignments</span>
+          <div class="panel-filters">
+            <select id="filterPriority" class="filter-select">
+              <option value="All">All Priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <select id="filterStatus" class="filter-select">
+              <option value="All">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Submitted">Submitted</option>
+              <option value="Missed">Missed</option>
+            </select>
+          </div>
+        </div>
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="🔍  Search assignments..." class="search-input" />
+        </div>
+        <div id="assignmentList" class="assignment-list"></div>
+      </div>
+
+      <!-- RIGHT: Side panels -->
+      <div class="side-panels">
+
+        <!-- Completion Rate -->
+        <div class="panel completion-panel">
+          <div class="panel-title">📊 Completion Rate</div>
+          <div class="completion-body">
+            <div class="donut-wrap">
+              <canvas id="donutChart" width="100" height="100"></canvas>
+              <div class="donut-label" id="completionPct">0%</div>
+            </div>
+            <div class="completion-text">of assignments completed</div>
+          </div>
+        </div>
+
+        <!-- Due Soon -->
+        <div class="panel">
+          <div class="panel-title">🔔 Due Soon</div>
+          <div id="dueSoonList" class="side-list">
+            <div class="side-empty">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Critical Priority -->
+        <div class="panel">
+          <div class="panel-title">🚨 Critical Priority</div>
+          <div id="criticalList" class="side-list">
+            <div class="side-empty">Loading...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+ <!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+
+    <h3 id="modalTitle">New Assignment</h3>
+
+    <label>Title *</label>
+    <input type="text" id="title" placeholder="Assignment title" />
+
+    <label>Subject *</label>
+    <input type="text" id="subject" placeholder="e.g. Mathematics" />
+
+    <!-- NEW DESCRIPTION (optional but useful) -->
+    <label>Description</label>
+    <textarea id="description" placeholder="Add details..." rows="2"></textarea>
+
+    <label>Deadline *</label>
+    <input type="text" id="deadline" placeholder="Select date & time" />
+
+    <label>Priority</label>
+    <select id="priority">
+      <option>Low</option>
+      <option selected>Medium</option>
+      <option>High</option>
+    </select>
+
+    <!-- ✅ TAGS FIELD (ARRAY INPUT) -->
+    <label>Tags</label>
+    <input type="text" id="tags" placeholder="e.g. exam, revision, important" />
+
+    <!-- OPTIONAL: helper text -->
+    <small class="input-hint">Separate tags with commas</small>
+
+    <label>Professor</label>
+    <input type="text" id="professor" placeholder="e.g. Dr. John" />
+    
+    <label>Room</label>
+    <input type="text" id="room" placeholder="e.g. A-203" />
+    <button id="saveAssignment">Save Assignment</button>
+  </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
